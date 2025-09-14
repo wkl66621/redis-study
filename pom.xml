@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>com.wkl.study.redis</groupId>
     <artifactId>redis-study</artifactId>
@@ -46,10 +46,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <scope>runtime</scope> <!-- 运行时依赖，编译不依赖 -->
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -71,18 +68,26 @@
 
     <build>
         <plugins>
+            <!-- 只保留一个 maven-compiler-plugin 配置 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version> <!-- 明确版本 -->
                 <configuration>
+                    <source>17</source> <!-- 与 Java 版本一致 -->
+                    <target>17</target>
                     <annotationProcessorPaths>
+                        <!-- Lombok 注解处理器（必须指定版本，与依赖版本一致） -->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>1.18.12</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
+            <!-- Spring Boot 插件配置 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -97,5 +102,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
