@@ -1,15 +1,13 @@
-package com.wkl.study.redis.redisstudy.service.entity;
+package com.wkl.study.redis.redisstudy.dataBase.vo;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 
 @Data
 @Accessors(chain = true)
-@Slf4j
-public class InfoToHtmlDto implements Serializable {
+public class InfoToHtmlVo implements Serializable {
     private Integer id;
 
     private String name;
