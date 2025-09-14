@@ -1,7 +1,9 @@
 package com.wkl.study.redis.redisstudy.service;
 
+import com.wkl.study.redis.redisstudy.dataBase.InfoToHtmlPoToVoAssemble;
 import com.wkl.study.redis.redisstudy.dataBase.mapper.InfoToHtmlMapper;
 import com.wkl.study.redis.redisstudy.dataBase.po.InfoToHtmlPo;
+import com.wkl.study.redis.redisstudy.dataBase.vo.InfoToHtmlVo;
 import com.wkl.study.redis.redisstudy.service.entity.InfoToHtmlDto;
 import com.wkl.study.redis.redisstudy.service.repositoryImpl.InfoToHtmlRepositoryImpl;
 import jakarta.annotation.Resource;
@@ -24,8 +26,9 @@ public class mysqlDemoService {
         infoToHtmlDto.setId(id);
         //从数据库中去取出数据
         infoToHtmlPo = infoToHtmlRepositoryImpl.selectById(infoToHtmlDto);
+        InfoToHtmlVo infoToHtmlVo = InfoToHtmlPoToVoAssemble.getInstance().convert(infoToHtmlPo);
         //将数据存入redis中
-        redisTemplate.opsForValue().set("infoToHtmlPo",infoToHtmlPo);
+        redisTemplate.opsForValue().set("infoToHtmlVo",infoToHtmlVo);
         System.out.println(infoToHtmlPo);
     }
 }
