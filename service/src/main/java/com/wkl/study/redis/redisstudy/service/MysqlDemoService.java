@@ -1,18 +1,16 @@
 package com.wkl.study.redis.redisstudy.service;
 
 import com.wkl.study.redis.redisstudy.dataBase.InfoToHtmlPoToVoAssemble;
-import com.wkl.study.redis.redisstudy.dataBase.mapper.InfoToHtmlMapper;
 import com.wkl.study.redis.redisstudy.dataBase.po.InfoToHtmlPo;
 import com.wkl.study.redis.redisstudy.dataBase.vo.InfoToHtmlVo;
 import com.wkl.study.redis.redisstudy.service.entity.InfoToHtmlDto;
 import com.wkl.study.redis.redisstudy.service.repositoryImpl.InfoToHtmlRepositoryImpl;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class mysqlDemoService {
+public class MysqlDemoService {
     @Autowired
     InfoToHtmlRepositoryImpl infoToHtmlRepositoryImpl;
 
