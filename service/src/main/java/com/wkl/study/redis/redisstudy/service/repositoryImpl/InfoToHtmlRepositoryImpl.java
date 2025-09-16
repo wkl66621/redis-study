@@ -15,4 +15,8 @@ public class InfoToHtmlRepositoryImpl
     public  InfoToHtmlPo selectById(InfoToHtmlDto infoToHtmlDto) {
         return getBaseMapper().selectById(infoToHtmlDto);
     }
+
+    public boolean updateById(InfoToHtmlPo infoToHtmlPo) {
+        return getBaseMapper().updateById(infoToHtmlPo) > 0;
+    }
 }

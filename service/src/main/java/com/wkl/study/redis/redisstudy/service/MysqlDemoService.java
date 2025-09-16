@@ -27,13 +27,27 @@ public class MysqlDemoService {
         infoToHtmlDto.setId(id);
         //从数据库中去取出数据
         infoToHtmlPo = infoToHtmlRepositoryImpl.selectById(infoToHtmlDto);
-        InfoToHtmlVo infoToHtmlVo = InfoToHtmlPoToVoAssemble.getInstance().convert(infoToHtmlPo);
-        if(redisTemplate.opsForValue().getOperations().hasKey("infoToHtmlVo")){
-            log.info("redis中已存在key:{}","infoToHtmlVo");
+        InfoToHtmlVo infoToHtmlVo = InfoToHtmlPoToVoAssemble.getInstance().convertToVo(infoToHtmlPo);
+        if(redisTemplate.opsForValue().getOperations().hasKey("infoToHtmlVo" + id)){
+            log.info("redis中已存在key:{}","infoToHtmlVo" + 1);
         }else{
             //将数据存入redis中
-            redisTemplate.opsForValue().set("infoToHtmlVo",infoToHtmlVo);
+            redisTemplate.opsForValue().set("infoToHtmlVo" + id,infoToHtmlVo);
         }
-        log.info("{}",infoToHtmlPo);
+        log.info("{}",infoToHtmlVo);
+    }
+
+    public void updateRedis(){
+        InfoToHtmlPo infoToHtmlPo = new InfoToHtmlPo();
+        infoToHtmlPo.setId(1);
+        infoToHtmlPo.setName("wkl");
+        infoToHtmlPo.setPhone("123456789");
+        if(infoToHtmlRepositoryImpl.updateById(infoToHtmlPo)){
+            log.info("更新成功");
+            if ((redisTemplate.opsForValue().getOperations().hasKey("infoToHtmlVo" + infoToHtmlPo.getId()))){
+                redisTemplate.opsForValue().set("infoToHtmlVo" + infoToHtmlPo.getId(),
+                        InfoToHtmlPoToVoAssemble.getInstance().convertToVo(infoToHtmlPo));
+            }
+        }
     }
 }

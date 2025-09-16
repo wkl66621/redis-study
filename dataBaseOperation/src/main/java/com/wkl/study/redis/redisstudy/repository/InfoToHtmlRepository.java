@@ -5,4 +5,6 @@ import com.wkl.study.redis.redisstudy.service.entity.InfoToHtmlDto;
 
 public interface InfoToHtmlRepository {
     InfoToHtmlPo selectById(InfoToHtmlDto infoToHtmlDto);
+
+    boolean updateById(InfoToHtmlPo infoToHtmlPo);
 }

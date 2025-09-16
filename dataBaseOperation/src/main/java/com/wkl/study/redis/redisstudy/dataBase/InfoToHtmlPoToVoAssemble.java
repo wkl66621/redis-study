@@ -22,7 +22,7 @@ public class InfoToHtmlPoToVoAssemble {
      * @param po 待转换的Po对象
      * @return 转换后的Vo对象，若po为null则返回null
      */
-    public InfoToHtmlVo convert(InfoToHtmlPo po) {
+    public InfoToHtmlVo convertToVo(InfoToHtmlPo po) {
         if (po == null) {
             return null;
         }
@@ -32,5 +32,22 @@ public class InfoToHtmlPoToVoAssemble {
         vo.setName(po.getName());
         vo.setPhone(po.getPhone());
         return vo;
+    }
+
+    /**
+     * 将InfoToHtmlVo对象转换为InfoToHtmlPo对象
+     * @param vo 待转换的Vo对象
+     * @return 转换后的Po对象，若vo为null则返回null
+     */
+    public InfoToHtmlPo convertToPo(InfoToHtmlVo vo) {
+        if (vo == null) {
+            return null;
+        }
+
+        InfoToHtmlPo po = new InfoToHtmlPo();
+        po.setId(vo.getId());
+        po.setName(vo.getName());
+        po.setPhone(vo.getPhone());
+        return po;
     }
 }
