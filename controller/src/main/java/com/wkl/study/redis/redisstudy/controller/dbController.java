@@ -15,7 +15,7 @@ public class dbController {
     @GetMapping("/toRedis")
     public String mySqlToRedis()
     {
-        mysqlDemoService.mySqlToRedis();
+        mysqlDemoService.setRedis();
         return "success";
     }
 }
