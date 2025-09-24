@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
 public class MysqlDemoService {
     private static final Logger log = LoggerFactory.getLogger(MysqlDemoService.class);
@@ -19,6 +21,7 @@ public class MysqlDemoService {
     InfoToHtmlRepositoryImpl infoToHtmlRepositoryImpl;
 
     @Autowired
+    @Qualifier("redisTemplate")
     RedisTemplate redisTemplate1;
 
     @Autowired
@@ -33,11 +36,18 @@ public class MysqlDemoService {
         //从数据库中去取出数据
         infoToHtmlPo = infoToHtmlRepositoryImpl.selectById(infoToHtmlDto);
         InfoToHtmlVo infoToHtmlVo = InfoToHtmlPoToVoAssemble.getInstance().convertToVo(infoToHtmlPo);
-        if(redisTemplate2.opsForValue().getOperations().hasKey("infoToHtmlVo" + id)){
-            log.info("redis中已存在key:{}","infoToHtmlVo" + 1);
+        //使用json序列化
+        if(redisTemplate2.opsForValue().getOperations().hasKey("infoToHtmlVo(json)" + id)){
+            log.info("redis中已存在key:{}","infoToHtmlVo" + id);
         }else{
             //将数据存入redis中
-            redisTemplate2.opsForValue().set("infoToHtmlVo" + id,infoToHtmlVo);
+            redisTemplate2.opsForValue().set("infoToHtmlVo(json)" + id, infoToHtmlVo,60, TimeUnit.SECONDS);
+        }
+        //使用普通序列化
+        if(redisTemplate1.opsForValue().getOperations().hasKey("infoToHtmlVo(normal)" + id)){
+            log.info("redis中已存在key:{}","infoToHtmlVo" + id);
+        }else {
+            redisTemplate1.opsForValue().set("infoToHtmlVo(normal)" + id, infoToHtmlVo,60, TimeUnit.SECONDS);
         }
         log.info("{}",infoToHtmlVo);
     }
