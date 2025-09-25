@@ -18,4 +18,11 @@ public class dbController {
         mysqlDemoService.setRedis();
         return "success";
     }
+
+    @GetMapping("/baseTypeOperation")
+    public String baseTypeOperation()
+    {
+        mysqlDemoService.baseTypeOperation();
+        return "success";
+    }
 }
