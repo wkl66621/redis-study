@@ -25,4 +25,18 @@ public class dbController {
         mysqlDemoService.baseTypeOperation();
         return "success";
     }
+
+    @GetMapping("/getLock")
+    public String getLock()
+    {
+        mysqlDemoService.getLock();
+        return "success";
+    }
+
+    @GetMapping("/tryLock")
+    public String tryLock()
+    {
+        mysqlDemoService.tryLock();
+        return "success";
+    }
 }

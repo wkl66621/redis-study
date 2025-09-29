@@ -5,6 +5,8 @@ import com.wkl.study.redis.redisstudy.dataBase.po.InfoToHtmlPo;
 import com.wkl.study.redis.redisstudy.dataBase.vo.InfoToHtmlVo;
 import com.wkl.study.redis.redisstudy.service.entity.InfoToHtmlDto;
 import com.wkl.study.redis.redisstudy.service.repositoryImpl.InfoToHtmlRepositoryImpl;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,10 @@ public class MysqlDemoService {
     @Autowired
     @Qualifier("JsonRedisTemplate")
     RedisTemplate redisTemplate2;
+
+    @Autowired
+    @Qualifier("myRedisson")
+    RedissonClient redissonClient;
 
     public void setRedis(){
         InfoToHtmlPo infoToHtmlPo;
@@ -120,5 +126,78 @@ public class MysqlDemoService {
         log.info("zset1:{}",redisTemplate2.opsForZSet().rangeWithScores(key5,0,-1));
         redisTemplate2.opsForZSet().incrementScore(key5,"c",10);
         log.info("zset2:{}",redisTemplate2.opsForZSet().rangeWithScores(key5,0,-1));
+    }
+
+    public void getLock() {
+        // 1. 定义锁的key
+        String lockKey = "redissonLock:";
+
+        // 2. 获取锁对象（可重入锁）
+        RLock lock = redissonClient.getLock(lockKey);
+
+        try {
+            // 3. 尝试获取锁
+            // 参数说明：waitTime=10秒（最多等待10秒），leaseTime=30秒（获取锁后持有30秒）
+            boolean isLocked = lock.tryLock(10, 30, TimeUnit.SECONDS);
+
+            if (!isLocked) {
+                // 获取锁失败
+                System.out.println("获取锁失败，可能并发过高");
+                return ;
+            }
+
+            // 4. 成功获取锁，执行临界区业务逻辑
+            System.out.println("线程" + Thread.currentThread().getId() + "获取锁成功");
+
+            // 模拟业务
+            Thread.sleep(50000);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return ;
+        } finally {
+            // 5. 释放锁（必须在finally中执行，确保锁一定会被释放）
+            // 先判断当前线程是否持有锁，避免释放其他线程的锁
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+                System.out.println("线程" + Thread.currentThread().getId() + "释放锁成功");
+            }
+        }
+    }
+
+    public void tryLock() {
+        // 1. 定义锁的key
+        String lockKey = "redissonLock:";
+
+        // 2. 获取锁对象（可重入锁）
+        RLock lock = redissonClient.getLock(lockKey);
+
+        try {
+            // 3. 尝试获取锁
+            // 参数说明：waitTime=10秒（最多等待10秒），leaseTime=30秒（获取锁后持有30秒）
+            boolean isLocked = lock.tryLock(10, 30, TimeUnit.SECONDS);
+
+            if (!isLocked) {
+                // 获取锁失败
+                System.out.println("获取锁失败，可能并发过高");
+                return ;
+            }
+
+            // 4. 成功获取锁，执行临界区业务逻辑
+            System.out.println("线程" + Thread.currentThread().getId() + "获取锁成功");
+
+            // 模拟业务
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return ;
+        } finally {
+            // 5. 释放锁（必须在finally中执行，确保锁一定会被释放）
+            // 先判断当前线程是否持有锁，避免释放其他线程的锁
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+                System.out.println("线程" + Thread.currentThread().getId() + "释放锁成功");
+            }
+        }
     }
 }
